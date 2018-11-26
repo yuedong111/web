@@ -15,9 +15,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from mysite.views import index, news_lis
+from mysite.views import index, news_lis, filter_test
+from mysite import views as siteviews
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index),
-    path('news_list/<str:new_type>', news_lis),
+    path('news_list/<str:news_type>', news_lis),
+    path('filter/', filter_test),
+    path('all/', siteviews.searchall),
+    path('search_name/', siteviews.searchname),
+    path('search_price/', siteviews.searchprice),
+    path('search_sort/', siteviews.searchsort),
+    path('reg/', siteviews.reg),  # 打开注册页面
+    path('register/', siteviews.register),  # 提交注册
+    path('check/', siteviews.check),  # 检查用户名是否注册
+    # path('change/', siteviews.change),
+    # path('changepass/', siteviews.changepass)
 ]
+
