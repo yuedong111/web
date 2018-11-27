@@ -30,7 +30,11 @@ urlpatterns = [
     path('reg/', siteviews.reg),  # 打开注册页面
     path('register/', siteviews.register),  # 提交注册
     path('check/', siteviews.check),  # 检查用户名是否注册
-    # path('change/', siteviews.change),
-    # path('changepass/', siteviews.changepass)
+    path('change/', siteviews.change),
+    path('changepass/', siteviews.changepass),
+    path('goods_list/', siteviews.goodslist),
+    path('add/', siteviews.add),
+    path('del/', siteviews.delete),
+    path('search/', siteviews.search),
 ]
 

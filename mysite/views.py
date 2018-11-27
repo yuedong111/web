@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-
+from django.core import serializers
 # Create your views here.
 from .models import Goods, Users
 from django.db.models import Q
@@ -89,3 +89,70 @@ def register(request):
     except:
         status = 100
     return HttpResponse(json.dumps({"status": status}))
+
+
+def change(request):
+    return render(request, 'change.html')
+
+
+def changepass(request):
+    user_name = request.GET['user_name']
+    password = request.GET['password']
+    user = Users.objects.filter(user_name=user_name)
+    try:
+        user.update(password=password)
+        status = 200
+    except:
+        status = 100
+    print(status)
+    return  HttpResponse(json.dumps({'status': status}))
+
+
+def goodslist(request):
+    result = Goods.objects.all()
+    return render(request, 'goods_list.html', {'goods_list': result})
+
+
+def add(request):
+    goods_name = request.GET['goods_name']
+    goods_price = request.GET['goods_price']
+    goods_number = request.GET['goods_number']
+    isexist = Goods.objects.filter(goods_name=goods_name)
+    try:
+        if not isexist:
+            goods = Goods()
+            goods.goods_name = goods_name
+            goods.goods_price = goods_price
+            goods.goods_number = goods_number
+            goods.save()
+            result = 200
+        else:
+            result = 100
+    except:
+        result = 100
+    return HttpResponse(result)
+
+
+def delete(request):
+    goods_name = request.GET['goods_name']
+    goods = Goods.objects.filter(goods_name=goods_name)
+    try:
+        goods.delete()
+        result = 200
+    except:
+        result = 100
+    return HttpResponse(result)
+
+
+def search(request):
+    min_price = int(request.GET['min_price'])
+    max_price = int(request.GET['max_price'])
+    goods = Goods.objects.filter(goods_price__gte=min_price, goods_price__lte=max_price)
+    try:
+        if goods:
+            result = json.dumps(serializers.serialize('json', goods))
+        else:
+            result = 100
+    except:
+        result = 100
+    return HttpResponse(result)
