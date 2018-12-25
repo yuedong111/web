@@ -41,6 +41,8 @@ urlpatterns = [
     path('thanks/', siteviews.thanks),
     path('email/', siteviews.write_email),
     path('send_email/', siteviews.send_email),
+    path('index1/exit/',siteviews.exit),
+    path('index1/', siteviews.index1),
 
 ]
 

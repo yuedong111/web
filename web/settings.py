@@ -134,3 +134,13 @@ EMAIL_PORT = 25
 EMAIL_HOST_USER = 'hchenpeng@163.com'
 EMAIL_HOST_PASSWORD = 'a19900121'
 DEFAULT_FROM_EMAIL = 'hchenpeng@163.com'
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Session的引擎（默认）
+SESSION_COOKIE_NAME = 'mysession'  # Session的Cookie的Key
+SESSION_COOKIE_PATH = "/"  # Session的Cookie的可访问路径（默认）
+SESSION_COOKIE_DOMAIN = None  # Session的cookie保存的域名（默认）
+SESSION_COOKIE_SECURE = False  # 是否HTTPS传输Cookie（默认）
+SESSION_COOKIE_HTTPONLY = True  # 是否Session的Cookie只支持HTTP传输（默认）
+SESSION_COOKIE_AGE = 604800  # Session的Cookie的有效时长（秒）（默认1209600）
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # 是否关闭浏览器使得Session过期（默认）
+SESSION_SAVE_EVERY_REQUEST = False

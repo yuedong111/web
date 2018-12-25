@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+</head>
+<body>
+<form action="/index1/" method="post">
+    {% csrf_token %}
+    {% if username %}
+        您好，{{ username }}！
+        <a href="exit/">退出</a>
+    {% else %}
+        <input type="text" name="username">
+        <input type="submit" value="登录">
+    {% endif %}
+</form>
+</body>
+</html>

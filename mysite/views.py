@@ -13,7 +13,6 @@ import os
 from django.core.mail import EmailMultiAlternatives
 
 
-
 def index(request):
     # return HttpResponse('中文site')
     return render(request, "index.html")
@@ -240,3 +239,26 @@ def send_email(request):
         email_form = FileMailForm()
         return render(request,'email.html',{'email_form': email_form})
 
+
+def index1(request):
+    if request.session.get('username',None):
+        # return render(request, 'index1.html', {'username': request.COOKIES['username']})
+        # return render(request, 'index1.html',  {'username': request.get_signed_cookie('username', salt='abcd')})
+        return render(request, 'index1.html', {'username': request.session['username']})
+    if request.method == 'POST':
+        username = request.POST['username']
+        request.session['username'] = username
+        # res = render(request, 'index1.html', {'username': username})
+        # # res.set_cookie('username', username, 3)
+        # res.set_signed_cookie('username', username, salt='zbcd')
+        # return res
+        return render(request, 'index1.html', {'username':username})
+    else:
+        return render(request,'index1.html')
+
+
+def exit(request):
+    del request.session['username']
+    res = HttpResponseRedirect('/index1')
+    # res.delete_cookie('username')
+    return res
