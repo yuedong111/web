@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from mysite.views import index, news_lis, filter_test
 from mysite import views as siteviews
+from register import views as form_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,7 +29,7 @@ urlpatterns = [
     path('search_price/', siteviews.searchprice),
     path('search_sort/', siteviews.searchsort),
     path('reg/', siteviews.reg),  # 打开注册页面
-    path('register/', siteviews.register),  # 提交注册
+    path('register/', form_views.register),  # 提交注册
     path('check/', siteviews.check),  # 检查用户名是否注册
     path('change/', siteviews.change),
     path('changepass/', siteviews.changepass),
@@ -36,5 +37,10 @@ urlpatterns = [
     path('add/', siteviews.add),
     path('del/', siteviews.delete),
     path('search/', siteviews.search),
+    path('user_name/', siteviews.get_name),
+    path('thanks/', siteviews.thanks),
+    path('email/', siteviews.write_email),
+    path('send_email/', siteviews.send_email),
+
 ]
 

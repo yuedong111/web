@@ -4,7 +4,14 @@ from django.core import serializers
 # Create your views here.
 from .models import Goods, Users
 from django.db.models import Q
+from django.http import HttpResponseRedirect
+from .forms import NameForm, ContackForm, FileMailForm, TextEmailForm
 import json
+from django.views.decorators.csrf import csrf_exempt
+from web import settings
+import os
+from django.core.mail import EmailMultiAlternatives
+
 
 
 def index(request):
@@ -156,3 +163,80 @@ def search(request):
     except:
         result = 100
     return HttpResponse(result)
+
+
+@csrf_exempt
+def get_name(request):
+    if request.method == 'POST':
+        form = NameForm(request.POST)
+        if form.is_valid():
+            return HttpResponseRedirect('/thanks/')
+    else:
+        form = NameForm()
+    return render(request, 'name.html', {'form': form})
+
+
+def thanks(request):
+    return render(request, 'thanks.html')
+
+
+def write_email(request):
+    form = FileMailForm()
+    return render(request, 'email.html', {'email_form':form})
+
+
+def upload_handler(file, file_name):
+    path = os.path.join(settings.BASE_DIR, 'uploads/')
+    if not os.path.exists(path):
+        os.makedirs(path)
+    with open(path + file_name, 'wb+') as f:
+        for chunk in file.chunks():
+            f.write(chunk)
+    return path + file_name
+
+
+def file_email_send(subject, message,sender, addresses, file):
+    email = EmailMultiAlternatives(subject, message, sender, addresses)
+    file_path = upload_handler(file, str(file))
+    email.attach_file(file_path)
+    email.send()
+
+
+def send_email(request):
+    if request.method == 'POST':
+        if request.FILES:
+            email_form = FileMailForm(request.POST, request.FILES)
+            file = request.FILES['file']
+        else:
+            email_form = TextEmailForm(request.POST)
+            file = None
+        if email_form.is_valid():
+            addresses = email_form.cleaned_data['addressees'].split(',')
+            subject = email_form.cleaned_data['subject']
+            message = email_form.cleaned_data['message']
+            cc_myself = email_form.cleaned_data['cc_myself']
+            if cc_myself:
+                addresses.append(settings.EMAIL_HOST_USER)
+            count = len(addresses)
+            email = [subject, message, settings.DEFAULT_FROM_EMAIL, addresses]
+            try:
+                if file:
+                    file_email_send(*email, file)
+                    file_name = "(附件: {})".format(str(file))
+                else:
+                    if count > 1:
+                        for item in addresses:
+                            email1 = [subject, message, settings.DEFAULT_FROM_EMAIL, item]
+                            send_email(*email1)
+                    else:
+                        send_email(*email)
+                    file_name = ''
+            except:
+                return HttpResponse('send fail')
+            return render(request, 'thanks.html', {'count':count,'to': addresses, 'file': file_name})
+        else:
+            return HttpResponse('check failed')
+    else:
+        email_form = FileMailForm()
+        return render(request,'email.html',{'email_form': email_form})
+

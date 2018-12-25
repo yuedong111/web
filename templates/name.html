@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>表单示例</title>
+</head>
+<body>
+<form action="/user_name/" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="OK">
+</form>
+</body>
+</html>
