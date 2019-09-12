@@ -132,7 +132,7 @@ EMAIL_USE_SSL = True
 EMAIL_HOST = 'smtp.163.com'
 EMAIL_PORT = 25
 EMAIL_HOST_USER = 'hchenpeng@163.com'
-EMAIL_HOST_PASSWORD = 'a19900121'
+EMAIL_HOST_PASSWORD = ''
 DEFAULT_FROM_EMAIL = 'hchenpeng@163.com'
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Session的引擎（默认）
